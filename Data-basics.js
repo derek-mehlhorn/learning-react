@@ -21,15 +21,11 @@ const CardList = (props) => {
 class Form extends React.Component {
 	constructor(props) {
       	super(props);
-        this.state = {username: 'derek-mehlhorn'};
-    }
-
-	handleChange = (event) => {
-  	    this.setState({username: event.target.value});
+        this.userNameInput = React.createRef();
     }
 
 	handleSubmit = (event) => {
-        this.props.callback(this.state.username); // Invoke callback
+        this.props.callback(this.userNameInput.current.value); // Invoke callback
         event.preventDefault(); // mark event as handled.
     };
 
@@ -37,9 +33,9 @@ class Form extends React.Component {
     return (
       <form onSubmit={this.handleSubmit}>
         <input type="text" 
-                value={this.state.username} 
+                ref={this.userNameInput}
                 placeholder="username" 
-                onChange={this.handleChange} />
+                required/>
         <button type="submit">Add card</button>
       </form>
     );
