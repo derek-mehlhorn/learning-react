@@ -29,7 +29,7 @@ class Form extends React.Component {
     }
 
 	handleSubmit = (event) => {
-        this.props.callback(); // Invoke callback
+        this.props.callback(this.state.username); // Invoke callback
         event.preventDefault(); // mark event as handled.
     };
 
@@ -59,11 +59,11 @@ class App extends React.Component {
     };
   }
   
-  addUser = () => {
+  addUser = (name) => {
     this.setState((state, props) => {
       let updated = state.data;
       updated.push({
-                      name: "zz",
+                      name: name,
                       company: "zzz",
                       avatar_url: "https://avatars0.githubusercontent.com/u/1?v=4"
                     });
