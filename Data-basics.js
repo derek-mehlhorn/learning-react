@@ -54,24 +54,12 @@ class App extends React.Component {
 	
     constructor(props) {
         super(props);
-        
-        this.state = {
-            data: [ 
-            { name: "Abc", company: "B", avatar_url: "https://avatars0.githubusercontent.com/u/1?v=4" },
-            { name: "Def", company: "B", avatar_url: "https://avatars0.githubusercontent.com/u/1?v=4" }
-            ]
-    };
+        this.state = { data: [] };
   }
   
     addUser = (result) => {
     	this.setState((state, props) => {
-          let updated = state.data;
-          updated.push({
-                      name: result['name'],
-                      company: result['company'],
-                      avatar_url: result['avatar_url']
-                  });
-          return { data: updated };
+          return state.data.push(result);
         });
     };
 
