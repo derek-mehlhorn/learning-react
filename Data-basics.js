@@ -29,9 +29,13 @@ class Form extends React.Component {
     }
 
 	handleSubmit = (event) => {
-        this.props.callback(this.state.username); // Invoke callback
         event.preventDefault(); // mark event as handled.
-    };
+        axios.get(`https://api.github.com/users/${this.state.username}`)
+            .then(result => {
+            this.props.callback(result.data); // Invoke callback
+            this.setState({ username: ''});
+		});        
+  };
 
 	render() {
     return (
@@ -59,25 +63,16 @@ class App extends React.Component {
     };
   }
   
-    addUser = (name) => {
-        fetch(`https://api.github.com/users/${name}`)
-        .then(res => res.json())
-        .then(
-            (result) => {
-            this.setState((state, props) => {
-                let updated = state.data;
-                updated.push({
-                            name: result['name'],
-                            company: result['company'],
-                            avatar_url: result['avatar_url']
-                        });
-                return { data: updated };
-            });
-            },
-            (error) => {
-                alert(error);
-            }
-        );
+    addUser = (result) => {
+    	this.setState((state, props) => {
+          let updated = state.data;
+          updated.push({
+                      name: result['name'],
+                      company: result['company'],
+                      avatar_url: result['avatar_url']
+                  });
+          return { data: updated };
+        });
     };
 
     render() {
