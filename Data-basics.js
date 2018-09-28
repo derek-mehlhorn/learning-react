@@ -21,7 +21,7 @@ const CardList = (props) => {
 class Form extends React.Component {
 	constructor(props) {
       	super(props);
-        this.state = {username: 'default'};
+        this.state = {username: 'derek-mehlhorn'};
     }
 
 	handleChange = (event) => {
@@ -37,7 +37,7 @@ class Form extends React.Component {
     return (
       <form onSubmit={this.handleSubmit}>
         <input type="text" 
-        				value={this.state.username} 
+                value={this.state.username} 
                 placeholder="username" 
                 onChange={this.handleChange} />
         <button type="submit">Add card</button>
@@ -48,37 +48,46 @@ class Form extends React.Component {
 
 class App extends React.Component {
 	
-  constructor(props) {
-  	super(props);
-    
-    this.state = {
-    	data: [ 
-        { name: "Abc", company: "B", avatar_url: "https://avatars0.githubusercontent.com/u/1?v=4" },
-        { name: "Def", company: "B", avatar_url: "https://avatars0.githubusercontent.com/u/1?v=4" }
-		]
+    constructor(props) {
+        super(props);
+        
+        this.state = {
+            data: [ 
+            { name: "Abc", company: "B", avatar_url: "https://avatars0.githubusercontent.com/u/1?v=4" },
+            { name: "Def", company: "B", avatar_url: "https://avatars0.githubusercontent.com/u/1?v=4" }
+            ]
     };
   }
   
-  addUser = (name) => {
-    this.setState((state, props) => {
-      let updated = state.data;
-      updated.push({
-                      name: name,
-                      company: "zzz",
-                      avatar_url: "https://avatars0.githubusercontent.com/u/1?v=4"
-                    });
-      return { data: updated };
-    });
-  };
+    addUser = (name) => {
+        fetch(`https://api.github.com/users/${name}`)
+        .then(res => res.json())
+        .then(
+            (result) => {
+            this.setState((state, props) => {
+                let updated = state.data;
+                updated.push({
+                            name: result['name'],
+                            company: result['company'],
+                            avatar_url: result['avatar_url']
+                        });
+                return { data: updated };
+            });
+            },
+            (error) => {
+                alert(error);
+            }
+        );
+    };
 
-	render() {
-  	return (
-    	<div>
-    		<Form data={this.state.data} callback={this.addUser}/>
-    		<CardList cards={this.state.data} />
-      </div>
-  	);
-  }
+    render() {
+        return (
+            <div>
+                <Form data={this.state.data} callback={this.addUser}/>
+                <CardList cards={this.state.data} />
+        </div>
+        );
+    }
 }
 
 ReactDOM.render(<App />, mountNode);
